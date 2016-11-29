@@ -20,7 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Main extends JavaPlugin{
     static Main instance;
-    Location[] gifts;
+    Gift[] gifts;
     PlayerConfig pc;
     @Override
     public void onLoad() {
@@ -39,18 +39,18 @@ public class Main extends JavaPlugin{
         }
         YamlConfiguration yc=YamlConfiguration.loadConfiguration(f);
         int amount=yc.getInt("Amount"); //Мне реально лень разделять конфиг, поэтому так:3
-        gifts=new Location[amount];
+        gifts=new Gift[amount];
         for(int i=0;i<amount;i++){
-            gifts[i]=new Location(Bukkit.getWorld(yc.getString(i+".World")),
-                    yc.getInt(i+".X"), yc.getInt(i+".Y"), yc.getInt(i+".Z")); //Страшная строка, ооочень страшная)
+            gifts[i]=new Gift(i,new Location(Bukkit.getWorld(yc.getString(i+".World")),
+                    yc.getInt(i+".X"), yc.getInt(i+".Y"), yc.getInt(i+".Z")),yc.getString(i+".Command")); //Страшная строка, ооочень страшная)
         }
     }
     
-    public int getNumber(Location loc){
+    public Gift getGift(Location loc){
         for(int i=0;i<gifts.length;i++){
-            if(gifts[i]==loc) return i;
+            if(gifts[i].getLoc().equals(loc)) return gifts[i];
         }
-        return -1;
+        return null;
     }
     
     @Override
